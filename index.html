@@ -208,6 +208,14 @@
                 <i class="fab fa-whatsapp"></i>
                 <span>WhatsApp</span>
             </button>
+            <button class="btn-common" id="instagram-profileButton">
+                <video autoplay muted loop>
+                    <source src="btn_video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+            </button>
             <button class="btn-common" id="telegramButton">
                 <video autoplay muted loop>
                     <source src="btn_video.mp4" type="video/mp4">
@@ -227,7 +235,7 @@
         </div>
 
         <div class="flex-center">
-            <h2>Video in collaborations</h2>
+            <h2 id="h2003">Video in collaboration</h2>
         </div>
         
         <div class="video-container">
@@ -247,14 +255,18 @@
             window.open("https://wa.me/919263827870", "_blank");  // Replace with your WhatsApp number
         });
 
+        document.getElementById("instagram-profileButton").addEventListener("click", function() {
+            window.open("https://www.instagram.com/editbypritamm/", "_blank");  // Replace with your WhatsApp number
+        });
+
         // Instagram Button
         document.getElementById("instagramButton").addEventListener("click", function() {
-            window.open("https://www.instagram.com/editbypritamm", "_blank");  // Replace with your Instagram profile
+            window.open("https://www.instagram.com/s/aGlnaGxpZ2h0OjE3ODkwNjMyMjQ2MjA4ODIz?story_media_id=3599565562311485470_61283486812&igsh=MWhmY3V2N2treHVqOA==", "_blank"); 
         });
 
         // Telegram Button
         document.getElementById("telegramButton").addEventListener("click", function() {
-            window.open("https://t.me/pritamchoudhary_53", "_blank");  // Replace with your Telegram username
+            window.open("https://t.me/pritamchoudhary_53", "_blank"); 
         });
 
         // Snapchat Button
