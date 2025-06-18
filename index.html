@@ -148,26 +148,36 @@
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* Aspect Ratio 16:9 */
-            overflow: hidden;
+            overflow: visible;   /* IMPORTANT: allow glow to be visible */
             border-radius: 15px;
             margin: 20px auto;
             max-width: 600px;
-            box-shadow: 0 0 10px 8px rgb(129 131 131 / 30%);
-            transition: box-shadow 0.3s ease-in-out;
+            background-color: transparent;
         }
 
-        .video-container video {
+        .video-container .ambient-video {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            background-color: rgb(43 43 43 / 45%);
+            border-radius: 15px;
         }
         #h2003{
             margin-top: 10px;
             color: #aaa;
+        }
+        .video-container .ambient-bg{
+            position: absolute;
+            object-fit: cover;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(15px);
+            -webkit-filter: blur(15px);
         }
     </style>
 </head>
@@ -231,7 +241,7 @@
             <button class="btn-common" id="snapchatButton">
                 <video autoplay muted loop>
                     <source src="btn_video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
+                    <!-- Your browser does not support the video tag. -->
                 </video>
                 <i class="fab fa-snapchat"></i>
                 <span>Snapchat</span>
@@ -242,11 +252,15 @@
             <h2 id="h2003">Video in collaboration</h2>
         </div>
         
-        <div class="video-container">
-            <video id="ambient-video" autoplay muted loop playsinline>
+        <div class="video-container" id="glow-container">
+            <video id="ambient-video" class="ambient-video" autoplay muted loop>
+                <source src="video_collab.mp4" type="video/mp4">
+            </video>
+            <video class="ambient-bg" autoplay muted loop>
                 <source src="video_collab.mp4" type="video/mp4">
             </video>
         </div>
+
 
         <footer>
         <p>&copy; 2025 Pritam Edits. All rights reserved.</p>
@@ -284,8 +298,47 @@
         document.getElementById("snapchatButton").addEventListener("click", function() {
             window.open("https://www.snapchat.com/add/pritaminfinity?share_id=F_GUURnwJc4&locale=en-IN", "_blank");
         });
+    </script>
+    <script>
+        const video = document.getElementById("ambient-video");
+        const container = document.getElementById("glow-container");
 
-       
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        function updateGlow() {
+            if (video.readyState >= 2 && !video.paused && !video.ended) {
+                canvas.width = 4;
+                canvas.height = 4;
+
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const frame = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+                let r = 0, g = 0, b = 0;
+                for (let i = 0; i < frame.length; i += 4) {
+                    r += frame[i];
+                    g += frame[i + 1];
+                    b += frame[i + 2];
+                }
+
+                const pixelCount = frame.length / 4;
+                r = Math.floor(r / pixelCount);
+                g = Math.floor(g / pixelCount);
+                b = Math.floor(b / pixelCount);
+
+                const glowColor = `rgba(${r}, ${g}, ${b}, 0.5)`;
+                container.style.boxShadow = `
+                    0 0 40px 10px ${glowColor},
+                    0 0 80px 20px ${glowColor}
+                `;
+            }
+
+            requestAnimationFrame(updateGlow);
+        }
+
+        video.addEventListener("play", () => {
+            updateGlow();
+        });
     </script>
 </body>
 </html>
